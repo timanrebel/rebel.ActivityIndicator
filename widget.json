@@ -1,0 +1,13 @@
+{
+	"id": "rebel.ActivityIndicator",
+	"name": "Custom Activity Indicator",
+	"description": "",
+	"author": "Timan Rebel",
+	"version": "1.0",
+	"copyright": "Copyright (c) 2012",
+	"license": "MIT License",
+	"min-alloy-version": "1.0",
+	"min-titanium-version": "2.1",
+	"tags": "",
+	"platforms": "android,ios"
+}

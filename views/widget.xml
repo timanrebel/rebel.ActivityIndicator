@@ -1,0 +1,7 @@
+<Alloy>
+	<View id="container">
+		<View class="background">
+			<ImageView id="activityIndicator" />
+		</View>
+	</View>
+</Alloy>
