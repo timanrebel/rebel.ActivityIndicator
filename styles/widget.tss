@@ -1,17 +1,13 @@
+"ImageView": {
+	image: WPATH('/images/loading.png'),
+	visible: true
+}
+
 "#container": {
 	width: Ti.UI.FILL,
 	height: Ti.UI.FILL,
-	
+
 	zIndex: 500,
 	visible: false,
 	touchEnabled: false
-}
-
-".background": {
-	
-}
-
-"#activityIndicator": {
-	image: WPATH('/images/loading.png'),
-	visible: true
 }
