@@ -1,8 +1,10 @@
 /**
  * The ActivityIndicator Widget controller generates an ActivityIndicitor, which is hidden by default
- * 
+ *
  * @class sc.ActivityIndicator.controller.Widget
  */
+var Animator = require('com.animecyc.animator');
+
 _.extend(this, {
 	construct: function(config) {
 		config = config || {};
@@ -28,39 +30,40 @@ _.extend(this, {
 	 * Show the ActivityIndicator
 	 */
 	show: function() {
-		_keepAnimating = true;
+		console.log('show');
+		if(_keepAnimating === false) {
+			_.defer(function() {
+				$.container.open();
 
-		if($.container.visible === false) {
-			_spinAnimation.addEventListener('complete', onSpinIsComplete);
-			$.activityIndicator.animate(_spinAnimation);
+				Animator.animate($.activityIndicator, _spinAnimation);
 
-			$.container.visible = true;
+				_keepAnimating = true;
+			});
 		}
 	},
-	
+
 	/**
-	 * Hide the ActivityIndicator. 
-	 * 
+	 * Hide the ActivityIndicator.
+	 *
 	 * This is done via an Animation fading out the ActivityIndicator on iOS and directly on Android
 	 */
 	hide: function() {
-		if($.container.visible === true) {
+		console.log('hide');
+		if(_keepAnimating === true) {
 			// Fade out like native iOS activityIndicators
-			if(OS_IOS) {
-				_fadeOutAnimation.addEventListener('complete', onFadeOutIsComplete);
-				
-				$.container.animate(_fadeOutAnimation);
-			}
-			// Just hide
-			else {
-				$.container.visible = false;
-			}
+			// if(OS_IOS) {
+			// 	Animator.animate($.container, _fadeOutAnimation, onFadeOutIsComplete);
+			// }
+			// // Just hide
+			// else {
+				onFadeOutIsComplete();
+			// }
 		}
 	},
-	
+
 	/**
 	 * Either show or hide the activityIndicator based on the boolean given
-	 * 
+	 *
 	 * @param {Boolan} bool True to shode, false to hide the activityIndicator
 	 */
 	setVisible: function(bool) {
@@ -71,53 +74,41 @@ _.extend(this, {
 	}
 });
 
+var _keepAnimating = false;
+
 /**
  * Animation used when hiding the ActivityIndicator
  * @private
  */
 var _fadeOutAnimation = Ti.UI.createAnimation({
-    curve: Ti.UI.ANIMATION_CURVE_EASE_IN_OUT,
     opacity: 0,
     duration: 300,
-});
-
-var _keepAnimating = true;
-
-var _transform = Ti.UI.create2DMatrix().rotate(179);
-
-
-var _spinAnimation = Titanium.UI.createAnimation({
-	transform: _transform,
-	duration: 500, // chage this value to adjust rotation speed
-	curve: Ti.UI.ANIMATION_CURVE_LINEAR 
+	easing: Animator.LINEAR
 });
 
 /**
+ * Animation used to rotate the view. 10 rotations in 10 seconds.
+ * @private
+ */
+var _spinAnimation = {
+    rotate: 3600,
+    duration: 10000,
+    easing: Animator.LINEAR
+};
+
+function onCancel(evt) {
+	console.log('cancel');
+	$.hide();
+}
+
+/**
  * Act on completion of the fade-out animation. Resetting the container into original configuration.
- * 
+ *
  * @param {Object} evt Event details
  */
 function onFadeOutIsComplete(evt) {
-	_fadeOutAnimation.removeEventListener('complete', onFadeOutIsComplete);
-	
-	$.container.visible = false;
+	$.container.close();
 	$.container.opacity = 1;
 
 	_keepAnimating = false;
-}
-
-function onSpinIsComplete(evt) {
-	if(!_keepAnimating) {
-		_spinAnimation.removeEventListener('complete', onSpinIsComplete);
-		return false;
-	}
-
-	// First overwrite transform, so spinner keeps spinning
-	_transform = _transform.rotate(179);
-
-	// Assign new transformation
-	_spinAnimation.transform = _transform;
-	
-	// And do another animation
-	$.activityIndicator.animate(_spinAnimation);
 }

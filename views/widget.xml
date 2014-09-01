@@ -1,7 +1,5 @@
 <Alloy>
-	<View id="container">
-		<View id="activityBackground">
-			<ImageView id="activityIndicator" />
-		</View>
-	</View>
+	<Window id="container" onClick="onCancel">
+		<ImageView id="activityIndicator" />
+	</Window>
 </Alloy>

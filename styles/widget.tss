@@ -1,13 +1,9 @@
-"ImageView": {
-	image: WPATH('/images/loading.png'),
-	visible: true
+"#container": {
+	backgroundColor: undefined,
+	backgroundImage: undefined,
+	zIndex: 9999
 }
 
-"#container": {
-	width: Ti.UI.FILL,
-	height: Ti.UI.FILL,
-
-	zIndex: 500,
-	visible: false,
-	touchEnabled: false
+"ImageView": {
+	image: WPATH('/images/loading.png')
 }
