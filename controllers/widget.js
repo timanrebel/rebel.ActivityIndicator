@@ -30,7 +30,6 @@ _.extend(this, {
 	 * Show the ActivityIndicator
 	 */
 	show: function() {
-		Ti.API.info('show');
 		if(_keepAnimating === false) {
 			_.defer(function() {
 				$.container.open();
@@ -48,7 +47,6 @@ _.extend(this, {
 	 * This is done via an Animation fading out the ActivityIndicator on iOS and directly on Android
 	 */
 	hide: function() {
-		Ti.API.info('hide');
 		if(_keepAnimating === true) {
 			// Fade out like native iOS activityIndicators
 			// if(OS_IOS) {
