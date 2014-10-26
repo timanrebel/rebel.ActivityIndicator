@@ -9,18 +9,20 @@ _.extend(this, {
 	construct: function(config) {
 		config = config || {};
 
-		$.activityIndicator.applyProperties({
-			top: config.top,
-			bottom: config.bottom,
-			left: config.left,
-			right: config.right,
-			width: config.width,
-			height: config.height
-		});
+		if(OS_IOS) {
+			$.activityIndicator.applyProperties({
+				top: config.top,
+				bottom: config.bottom,
+				left: config.left,
+				right: config.right,
+				width: config.width,
+				height: config.height
+			});
 
-		$.container.applyProperties({
-			backgroundColor: config.backgroundColor
-		});
+			$.getView().applyProperties({
+				backgroundColor: config.backgroundColor
+			});
+		}
 
 		if(config.visible)
 			$.show();
@@ -31,13 +33,18 @@ _.extend(this, {
 	 */
 	show: function() {
 		if(_keepAnimating === false) {
-			_.defer(function() {
-				$.container.open();
+			if(OS_IOS) {
+				_.defer(function() {
+					$.getView().open();
 
-				Animator.animate($.activityIndicator, _spinAnimation);
+					Animator.animate($.activityIndicator, _spinAnimation);
 
-				_keepAnimating = true;
-			});
+					_keepAnimating = true;
+				});
+			}
+			else {
+				$.getView().show();
+			}
 		}
 	},
 
@@ -49,13 +56,13 @@ _.extend(this, {
 	hide: function() {
 		if(_keepAnimating === true) {
 			// Fade out like native iOS activityIndicators
-			// if(OS_IOS) {
-			// 	Animator.animate($.container, _fadeOutAnimation, onFadeOutIsComplete);
-			// }
+			if(OS_IOS) {
+				Animator.animate($.getView(), _fadeOutAnimation, onFadeOutIsComplete);
+			}
 			// // Just hide
-			// else {
-				onFadeOutIsComplete();
-			// }
+			else {
+				$.getView().hide();
+			}
 		}
 	},
 
@@ -78,11 +85,11 @@ var _keepAnimating = false;
  * Animation used when hiding the ActivityIndicator
  * @private
  */
-var _fadeOutAnimation = Ti.UI.createAnimation({
+var _fadeOutAnimation = {
     opacity: 0,
     duration: 300,
 	easing: Animator.LINEAR
-});
+};
 
 /**
  * Animation used to rotate the view. 10 rotations in 10 seconds.
@@ -91,7 +98,7 @@ var _fadeOutAnimation = Ti.UI.createAnimation({
 var _spinAnimation = {
     rotate: 3600,
     duration: 10000,
-    easing: Animator.LINEAR
+    easing: Animator.BOUNCE_OUT
 };
 
 function onCancel(evt) {
@@ -105,8 +112,8 @@ function onCancel(evt) {
  * @param {Object} evt Event details
  */
 function onFadeOutIsComplete(evt) {
-	$.container.close();
-	$.container.opacity = 1;
+	$.getView().close();
+	$.getView().opacity = 1;
 
 	_keepAnimating = false;
 }

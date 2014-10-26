@@ -1,9 +1,18 @@
-"#container": {
-	backgroundColor: undefined,
+"Window": {
+	backgroundColor: 'transparent',
 	backgroundImage: undefined,
 	zIndex: 9999
 }
 
+"Window[platform=android]": {
+	/*theme: 'Theme.AppCompat.Translucent.NoTitleBar'*/
+}
+
 "ImageView": {
 	image: WPATH('/images/loading.png')
+}
+
+".progressIndicator[platform=android]": {
+	  message: L('loadingMessage', 'Loading..'),
+	  cancelable: true
 }

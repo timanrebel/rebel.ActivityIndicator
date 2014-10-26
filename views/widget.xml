@@ -1,5 +1,6 @@
 <Alloy>
-	<Window id="container" onClick="onCancel">
+	<Window onClick="onCancel" platform="ios">
 		<ImageView id="activityIndicator" />
 	</Window>
+	<ProgressIndicator ns="Ti.UI.Android" platform="android" id="progressIndicator" class="progressIndicator" onCancel="onCancel" />
 </Alloy>
